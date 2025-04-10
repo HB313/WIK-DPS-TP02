@@ -1,69 +1,93 @@
-# TP1 DevOps: Developpement API 
+# 🐳 TP2 DevOps : Conteneurisation
 
 ## Description du projet
 
-Ce projet consiste à créer une API en TypeScript utilisant Express et dotenv. L'API est configurée pour répondre à la route /ping avec les headers de la requête en format JSON. Elle est également configurée pour écouter sur un port personnalisé, défini par la variable d'environnement PING_LISTEN_PORT.
+Ce projet porte sur l'utilisation avancée de Docker, la création d'images optimisées (single-stage et multi-stage), le scan de vulnérabilités et les bonnes pratiques de sécurité (exécution avec utilisateur non-root).
+Un bonus consiste à créer une image Docker de moins de 500 bytes.
 
-## Installation et lancement
 
-### Prérequis
-- Node.js installé 
-- NPM installé 
+### Objectif
 
-### Dependances utilisés
+- Construire une image Docker single-stage fonctionnelle.
 
-- Express
-- TypeScript
-- dotenv
-- tsx
+- Construire une image Docker multi-stage optimisée.
 
-### Étapes
+- Scanner les images pour détecter d’éventuelles vulnérabilités.
 
-1. Cloner le dépôt :
-   ```
-   git clone https://github.com/HB313/wik-dps-tp01.git
-   cd wik-dps-tp01
-   ```
+- Appliquer les bonnes pratiques de sécurité (notamment ne pas exécuter en tant que root).
 
-2. Installer les dépendances :
-   ```
-   npm install
-   ```
-## Demarrer l'application
+- Créer une image minimale (bonus).
 
-### En Developpement(avec tsx)
 
+## 🧩 Étape 1 : Dockerfile Single-Stage
+
+> Fichier : `Dockerfile.single`
+
+### ✔️ Description
+Création d'une image Docker fonctionnelle en une seule étape, sans optimisation poussée.
+
+### 🔐 Résultats du scan de vulnérabilités
+
+| Vulnérabilité | Niveau | Paquet concerné | Résolu ? |
+|---------------|--------|------------------|----------|
+| ...           | ...    | ...              | ...      |
+
+📦 **Taille de l’image** : `... MB`  
+👤 **Utilisateur non-root** : ❌ / ✅
+
+---
+
+## 🧱 Étape 2 : Dockerfile Multi-Stage
+
+> Fichier : `Dockerfile.multi`
+
+### ✔️ Description
+Refactorisation de l’image précédente en plusieurs étapes pour :
+- Réduire la taille de l’image finale.
+- Exclure les dépendances de build.
+- Améliorer la sécurité.
+
+### 🔐 Résultats du scan de vulnérabilités
+
+| Vulnérabilité | Niveau | Paquet concerné | Résolu ? |
+|---------------|--------|------------------|----------|
+| ...           | ...    | ...              | ...      |
+
+📦 **Taille de l’image** : `... MB`  
+👤 **Utilisateur non-root** : ✅
+
+---
+
+## 🎁 Étape Bonus : Image < 500 Bytes
+
+> Fichier : `Dockerfile.bonus`
+
+### ✔️ Description
+Challenge technique consistant à créer une image Docker de **moins de 500 bytes**, fonctionnelle selon les contraintes données.
+
+### 🔐 Résultats du scan de vulnérabilités
+
+| Vulnérabilité | Niveau | Paquet concerné | Résolu ? |
+|---------------|--------|------------------|----------|
+| ...           | ...    | ...              | ...      |
+
+📦 **Taille de l’image** : `... bytes`  
+👤 **Utilisateur non-root** : ✅ / ❌  
+✅ Fonctionnelle : Oui / Non
+
+---
+
+## 🛠️ Commandes utiles
+
+```bash
+# Build des images
+docker build -t wik-tp02-single -f Dockerfile.single .
+docker build -t wik-tp02-multi -f Dockerfile.multi .
+docker build -t wik-tp02-bonus -f Dockerfile.bonus .
+
+# Scan avec Trivy
+trivy image wik-tp02-single
+trivy image wik-tp02-multi
+trivy image wik-tp02-bonus
 ```
-npm run dev
-```
-
-### En production
-
-```
-npm run build
-npm run start
-```
-
-## Utilisation de l'API
-
-#### GET /ping : retourne un objet JSON avec les headers de la requete.
-
-#### Exemple de reponse 
-```
-host	"localhost:4000"
-user-agent	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:136.0) Gecko/20100101 Firefox/136.0"
-accept	"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
-accept-language	"en-US,en;q=0.5"
-accept-encoding	"gzip, deflate, br, zstd"
-connection	"keep-alive"
-upgrade-insecure-requests	"1"
-sec-fetch-dest	"document"
-sec-fetch-mode	"navigate"
-sec-fetch-site	"none"
-...
-```
-
-#### Route autres
-
-Retourne une Erreur 404 Vide
 
