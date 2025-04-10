@@ -1,0 +1,28 @@
+# Étape unique (Single-stage)
+FROM node:20-alpine
+
+# Création d’un utilisateur non-root
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+WORKDIR /app
+
+# Copier uniquement les fichiers nécessaires à l'installation en premier
+COPY package*.json ./
+
+# Installer les dépendances 
+RUN npm install 
+
+# Copier le reste des fichiers (dont le TypeScript)
+COPY . .
+
+# Compiler le TypeScript
+RUN npm run build
+
+# Utiliser l'utilisateur non-root
+USER appuser
+
+# Exposer le port si besoin (à adapter)
+EXPOSE 3000
+
+# Lancer l'API (JS compilé)
+CMD ["node", "dist/server.js"]
