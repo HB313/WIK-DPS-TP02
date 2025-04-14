@@ -1,0 +1,44 @@
+# -------- STAGE 1 : BUILD ----------
+    FROM node:20-alpine AS builder
+
+    # Créer le dossier de travail
+    WORKDIR /app
+    
+    # Copier les fichiers de dépendances
+    COPY package*.json ./
+    
+    # Installer toutes les dépendances (y compris les devDeps)
+    RUN npm install
+    
+    # Copier le reste du code source
+    COPY . .
+    
+    # Compiler le TypeScript vers JavaScript
+    RUN npm run build
+    
+    
+    # -------- STAGE 2 : RUNTIME ----------
+    FROM node:20-alpine
+    
+    # Créer un utilisateur non-root
+    RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+    
+    # Créer le dossier de travail
+    WORKDIR /app
+    
+    # Copier uniquement ce qui est nécessaire pour exécuter l'app
+    COPY --from=builder /app/dist ./dist
+    COPY --from=builder /app/package*.json ./
+    
+    # Installer uniquement les dépendances de production
+    RUN npm install --omit=dev
+    
+    # Sécurité : exécuter avec un utilisateur non-root
+    USER appuser
+    
+    # Exposer le port utilisé par ton app
+    EXPOSE 3000
+    
+    # Lancer ton API
+    CMD ["node", "dist/server.js"]
+    

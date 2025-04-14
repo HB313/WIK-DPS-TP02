@@ -1,0 +1,3 @@
+FROM scratch
+COPY count /count
+ENTRYPOINT ["/count"]
