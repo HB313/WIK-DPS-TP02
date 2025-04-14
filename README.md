@@ -154,6 +154,7 @@ Challenge technique consistant à créer une image Docker de **moins de 500 byte
 ✅ Fonctionnelle : Oui
 
 Meme si l'image est build from scratch avec un binaire depuis du code en C, il faudrait diviser son poids par 2000 pour respecter les contraintes: Pour la suite : assembly ?
+
 ---
 
 ## 🛠️ Commandes utiles
